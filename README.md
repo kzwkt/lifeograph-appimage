@@ -1,2 +1,2 @@
 # lifeograph-appimage
-debian stable appimage to avoid uncommon dependecies
+debian stable appimage to avoid uncommon dependecies test

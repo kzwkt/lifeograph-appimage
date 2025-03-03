@@ -9,5 +9,4 @@ ingredients:
     - deb http://security.debian.org/debian-security/ stable-security main contrib non-free non-free-firmware
     - deb http://ftp.debian.org/debian/ stable-updates main contrib non-free non-free-firmware
 script:
-  - mkdir -p usr/share/icons/hicolor/256x256/apps/
-  - cp /usr/share/icons/hicolor/scalable/apps/net.sourceforge.Lifeograph.svg  .
+  - cp usr/sehare/icons/hicolor/scalable/apps/net.sourceforge.Lifeograph.svg  .

@@ -1,5 +1,5 @@
 #!/bin/sh
-
+# run
 APP=lifeograph
 DEBRELEASE=stable
 ARCH=x86-64

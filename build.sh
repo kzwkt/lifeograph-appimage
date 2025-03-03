@@ -25,6 +25,22 @@ mv squashfs-root pkg2
 mv squashfs-root pkg1
 
 
+# ...REPLACING THE EXISTING APPRUN WITH A CUSTOM ONE...
+rm -R -f ./$APP/$APP.AppDir/AppRun
+cat >> ./$APP/$APP.AppDir/AppRun << 'EOF'
+#!/bin/sh
+HERE="$(dirname "$(readlink -f "${0}")")"
+export PATH="${HERE}"/usr/bin/:"${HERE}"/usr/sbin/:"${HERE}"/usr/games/:"${PATH}"
+export LD_LIBRARY_PATH=/lib/:/lib64/:/usr/lib/:/usr/lib/x86_64-linux-gnu/:"${HERE}"/usr/lib/:"${HERE}"/usr/lib/x86_64-linux-gnu/:"${HERE}"/lib/:"${HERE}"/lib/x86_64-linux-gnu/:"${LD_LIBRARY_PATH}"
+export XDG_DATA_DIRS="${HERE}"/usr/share/:"${XDG_DATA_DIRS}"
+exec ${HERE}/usr/bin/lifeograph "$@"
+EOF
+chmod a+x ./$APP/$APP.AppDir/AppRun
+mv ./AppRun ./$APP/$APP.AppDir
+
+
+# ...EXPORT THE APPDIR TO AN APPIMAGE!
+
 
 ARCH=x86_64 ./pkg1/AppRun   --comp zstd \
 	--mksquashfs-opt -Xcompression-level --mksquashfs-opt 22 \

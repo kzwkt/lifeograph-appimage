@@ -1,0 +1,45 @@
+name: Build MPV AppImage in Debian Stable Container
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*'               # Include all files
+      - '!README.md'          # Exclude README.md
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # This is to run the GitHub Actions itself
+    container:
+      image: debian:stable  
+   
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+
+    - name:  install dependecies
+      run: |
+        apt update -y
+        apt install -y --no-install-recommends   file desktop-file-utils imagemagick binutils libgpgme11 libglib2.0-bin zsync 
+        apt install wget  -y
+        bash build.sh
+        
+        upload=$(realpath tmp-stable/mpv_Media_Player-x86_64.AppImage)
+        echo "FILE1=${upload}" >> $GITHUB_ENV 
+
+        upload=$(realpath tmp-stable/mpv_Media_Player-x86_64.AppImage.zsync)
+        echo "FILE2=${upload}" >> $GITHUB_ENV 
+
+  
+    - name: Create GitHub Release and Upload ZIP
+      uses: softprops/action-gh-release@v2
+      with:
+          tag_name: ${{ github.run_id }}
+          files: |
+              ${{ env.FILE1 }}
+              ${{ env.FILE2 }}
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
